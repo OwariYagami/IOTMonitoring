@@ -220,54 +220,6 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-
-    fun uploadToKlasi(suhu:Double,humidity: Double,ppm: Double){
-        // Buat objek JSON sesuai dengan kebutuhan Anda
-        val json = """
-            {
-                "temp": $suhu,
-                "hum": $humidity,
-                "ppm": $ppm
-            }
-            """.trimIndent()
-
-        // Buat RequestBody dari JSON
-        val requestBody = RequestBody.create(MediaType.parse("application/json"), json)
-
-        // Panggil API menggunakan coroutine
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val response = ApiClient.retrofit.getPredict(requestBody)
-                // Periksa apakah permintaan berhasil (kode status 2xx)
-                if (response.isSuccessful) {
-                    val responseData: dataResponse? = response.body()
-
-                    // Lakukan sesuatu dengan data respons di sini
-                    responseData?.let {
-                        // Misalnya, cetak nilai dari respons
-                        val hasilKlasi = classifyPpm(it.prediction.toDouble())
-                        binding.tvKlasi.text="$hasilKlasi"
-                        Log.d("RESPONSE", "Hasil : ${it.prediction}")
-                    }
-                } else {
-                    // Handle respons gagal (kode status tidak 2xx)
-                    println("Respons gagal dengan kode: ${response.code()}")
-                }
-            } catch (e: Exception) {
-                Log.d("RESPONSE", "HASIL PREDIKSI : kosong")
-            }
-        }
-    }
-    // Fungsi untuk mengklasifikasikan berdasarkan hasil prediksi
-    private fun classifyPpm(prediksi: Double): String {
-        return when {
-            prediksi == 0.0 -> "BAIK"
-            prediksi == 1.0 -> "SEDANG"
-            prediksi == 2.0 -> "BURUK"
-            prediksi == 3.0 -> "SANGAT BURUK"
-            else -> "Tidak Diketahui" // Klasifikasi tambahan jika diperlukan
-        }
-    }
     fun updateDonutChartWithHumidity(humidity: Float) {
         val updatedData = listOf(humidity, 100f) // Sesuaikan dengan format data donut chart Anda
 
@@ -277,11 +229,17 @@ class MainActivity : AppCompatActivity() {
         // Update DonutChart
         binding.donutChart.animate(donutSet)
     }
+
     fun updateDonutChartWithPpm(ppm: Float) {
-        val updatedData = listOf(ppm, 300f) // Sesuaikan dengan format data donut chart Anda
+        // Mengatur nilai maksimum DonutChart menjadi 500
+        val maxDonutValue = 500f
+        val updatedData = listOf(ppm, maxDonutValue)
+
+        // Memastikan bahwa nilai DonutChart tidak melebihi maksimum yang diinginkan
+        val clampedData = updatedData.map { it.coerceIn(0f, maxDonutValue) }
 
         // Update donutSet
-        donutSet2 = updatedData
+        donutSet2 = clampedData
 
         // Update DonutChart
         binding.donutChartppm.animate(donutSet2)

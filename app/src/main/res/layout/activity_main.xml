@@ -32,18 +32,21 @@
         app:layout_constraintStart_toEndOf="@+id/switch_connect"
         app:layout_constraintTop_toTopOf="@+id/switch_connect"></TextView>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
+        app:layout_constraintHorizontal_bias="1"
+        android:layout_marginRight="@dimen/_16sdp"
         android:id="@+id/btn_lihat"
+        style="?attr/materialIconButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#1E88E5"
-        android:fontFamily="@font/poppins_rglr"
-        android:text="See History"
-android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:gravity="center"
+        app:icon="@drawable/ic_history"
+        app:iconSize="@dimen/_25sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_connect"
-        app:layout_constraintTop_toTopOf="parent"></com.google.android.material.button.MaterialButton>
-    <com.google.android.material.card.MaterialCardView
+        app:layout_constraintTop_toTopOf="parent" />
+  <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_suhu"
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
@@ -255,7 +258,7 @@ android:layout_marginTop="@dimen/_16sdp"
                 app:chart_donutBackgroundColor="#676565"
                 app:chart_donutRoundCorners="true"
                 app:chart_donutThickness="@dimen/_16sdp"
-                app:chart_donutTotal="100"
+                app:chart_donutTotal="500"
                 app:layout_constraintBottom_toBottomOf="parent"
 
                 app:layout_constraintEnd_toEndOf="parent"
